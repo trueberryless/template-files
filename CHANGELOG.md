@@ -1,5 +1,11 @@
 # template-files
 
+## 0.18.0
+
+### Minor Changes
+
+- [`b398230`](https://github.com/trueberryless/template-files/commit/b398230da95c5a5c5300af8e9a434abaa2aaef89) Thanks [@trueberryless](https://github.com/trueberryless)! - Run actions without custom GitHub app; use GITHUB_TOKEN instead
+
 ## 0.17.0
 
 ### Minor Changes
