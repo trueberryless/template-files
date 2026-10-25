@@ -1,5 +1,11 @@
 # template-files
 
+## 0.18.2
+
+### Patch Changes
+
+- [`3bf64af`](https://github.com/trueberryless/template-files/commit/3bf64aff27c8a97e4c8f5410f3da1371b4727b9b) Thanks [@trueberryless](https://github.com/trueberryless)! - Rename true-tracker to time-tracker
+
 ## 0.18.1
 
 ### Patch Changes
