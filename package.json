@@ -2,13 +2,13 @@
   "name": "template-files",
   "version": "0.18.0",
   "description": "Provide single point of truth for template files",
-  "homepage": "https://github.com/trueberryless-org/template-files",
+  "homepage": "https://github.com/trueberryless/template-files",
   "bugs": {
-    "url": "https://github.com/trueberryless-org/template-files/issues"
+    "url": "https://github.com/trueberryless/template-files/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/trueberryless-org/template-files.git"
+    "url": "https://github.com/trueberryless/template-files.git"
   },
   "license": "MIT",
   "author": "trueberryless <trueberryless@gmail.com> (https://felixs.dev)",

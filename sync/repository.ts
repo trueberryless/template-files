@@ -120,7 +120,7 @@ export function writeSummary(summary: SyncSummary, directory: string) {
 
 function getChangelogEntry(hash: string) {
   const repository =
-    process.env["GITHUB_REPOSITORY"] ?? "trueberryless-org/template-files";
+    process.env["GITHUB_REPOSITORY"] ?? "trueberryless/template-files";
 
   return `- ci: update GitHub template files - ([${hash}](https://github.com/${repository}/commit/${process.env["GITHUB_SHA"] ?? hash}))`;
 }

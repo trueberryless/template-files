@@ -1,72 +1,72 @@
 {
   "repositories": [
     {
-      "name": "trueberryless-org/template-files",
+      "name": "trueberryless/template-files",
       "preset": "tooling",
-      "homepage": "https://github.com/trueberryless-org/template-files"
+      "homepage": "https://github.com/trueberryless/template-files"
     },
     {
-      "name": "trueberryless-org/starlight-recipes",
+      "name": "trueberryless/starlight-recipes",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-view-modes",
+      "name": "trueberryless/starlight-view-modes",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-cooler-credit",
+      "name": "trueberryless/starlight-cooler-credit",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-sidebar-topics-dropdown",
+      "name": "trueberryless/starlight-sidebar-topics-dropdown",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-sidebar-swipe",
+      "name": "trueberryless/starlight-sidebar-swipe",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/astro-contributors",
+      "name": "trueberryless/astro-contributors",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-group-pages",
+      "name": "trueberryless/starlight-group-pages",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-latest-version",
+      "name": "trueberryless/starlight-latest-version",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-plugins-docs-components",
+      "name": "trueberryless/starlight-plugins-docs-components",
       "preset": "plugin",
-      "package": "@trueberryless-org/starlight-plugins-docs-components"
+      "package": "@trueberryless/starlight-plugins-docs-components"
     },
     {
-      "name": "trueberryless-org/starlight-theme-next",
+      "name": "trueberryless/starlight-theme-next",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-theme-rose-pine",
+      "name": "trueberryless/starlight-theme-rose-pine",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/starlight-save-file-component",
+      "name": "trueberryless/starlight-save-file-component",
       "preset": "plugin"
     },
     {
-      "name": "trueberryless-org/true-tracker",
+      "name": "trueberryless/true-tracker",
       "preset": "site",
       "homepage": "https://true-tracker.felixs.dev"
     },
     {
-      "name": "trueberryless-org/releases",
+      "name": "trueberryless/releases",
       "preset": "site",
-      "package": "@trueberryless-org/releases",
+      "package": "@trueberryless/releases",
       "homepage": "https://releases.felixs.dev"
     },
     {
-      "name": "trueberryless-org/starlight-plugin-translations",
+      "name": "trueberryless/starlight-plugin-translations",
       "preset": "site"
     },
     {
@@ -94,39 +94,39 @@
       "homepage": "https://the-thinking-hub.felixs.dev/"
     },
     {
-      "name": "trueberryless-org/mindspace",
+      "name": "trueberryless/mindspace",
       "preset": "site",
       "ci": true,
       "skip": [".prettierrc", "package.json/prettier.package.json", "LICENSE"],
       "homepage": "https://mindspace.felixs.dev/"
     },
     {
-      "name": "trueberryless-org/photos",
+      "name": "trueberryless/photos",
       "preset": "site",
       "ci": true,
       "homepage": "https://photos.felixs.dev/"
     },
     {
-      "name": "trueberryless-org/implications-trainer",
+      "name": "trueberryless/implications-trainer",
       "preset": "site",
       "ci": true,
       "homepage": "https://implications-trainer.netlify.app/"
     },
     {
-      "name": "trueberryless-org/nxjt",
+      "name": "trueberryless/nxjt",
       "preset": "site",
       "ci": true,
       "homepage": "https://nxjt.netlify.app/"
     },
     {
-      "name": "trueberryless-org/trueberryless-org",
+      "name": "trueberryless/trueberryless",
       "preset": "site",
       "ci": true,
-      "homepage": "https://trueberryless-org.netlify.app/",
+      "homepage": "https://trueberryless.netlify.app/",
       "skip": [".prettierrc", "package.json/prettier.package.json"]
     },
     {
-      "name": "trueberryless-org/npmxers",
+      "name": "trueberryless/npmxers",
       "preset": "site",
       "ci": true,
       "homepage": "https://npmxers.netlify.app/",
@@ -140,25 +140,25 @@
       "formatter": "oxfmt"
     },
     {
-      "name": "trueberryless-org/videos",
+      "name": "trueberryless/videos",
       "preset": "site",
       "ci": true,
       "homepage": "https://videos.felixs.dev/"
     },
     {
-      "name": "trueberryless-org/starlight-subtle-top-level-items",
+      "name": "trueberryless/starlight-subtle-top-level-items",
       "preset": "site",
       "ci": true,
       "homepage": "https://starlight-subtle-top-level-items.netlify.app/"
     },
     {
-      "name": "trueberryless-org/gh-activity",
+      "name": "trueberryless/gh-activity",
       "preset": "site",
       "ci": true,
       "homepage": "https://gh-activity.netlify.app/"
     },
     {
-      "name": "trueberryless-org/release-image-generator",
+      "name": "trueberryless/release-image-generator",
       "preset": "site",
       "ci": true,
       "homepage": "https://release-image-generator.netlify.app/"

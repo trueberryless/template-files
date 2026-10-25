@@ -19,7 +19,7 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           persist-credentials: false
       - name: Write tree outputs to README.md
-        uses: trueberryless-org/readme-tree-writer-all@v1
+        uses: trueberryless/readme-tree-writer-all@v1
         with:
           config_path: .github/readmetreerc.yaml
       - name: Create Pull Request

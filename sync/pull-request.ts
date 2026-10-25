@@ -2,7 +2,7 @@ import { run } from "./shell.ts";
 
 const BRANCH_NAME = "update-template-files";
 const LABEL = "🤖 bot";
-const TEMPLATE_REPOSITORY = "trueberryless-org/template-files";
+const TEMPLATE_REPOSITORY = "trueberryless/template-files";
 
 export function getBranchName() {
   return BRANCH_NAME;

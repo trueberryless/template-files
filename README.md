@@ -148,4 +148,4 @@ pnpm merge   # merge the open sync pull requests, needs GH_TOKEN; OWNER, DRY_RUN
 
 Licensed under the MIT license, Copyright © trueberryless.
 
-See [LICENSE](https://github.com/trueberryless-org/template-files/blob/main/LICENSE) for more information.
+See [LICENSE](https://github.com/trueberryless/template-files/blob/main/LICENSE) for more information.
