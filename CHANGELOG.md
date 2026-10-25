@@ -1,5 +1,11 @@
 # template-files
 
+## 0.18.1
+
+### Patch Changes
+
+- [`6751f9a`](https://github.com/trueberryless/template-files/commit/6751f9a0c02cac2200f8c4f1d6ef68cc39c5f309) Thanks [@trueberryless](https://github.com/trueberryless)! - Rename all trueberryless-org to trueberryless
+
 ## 0.18.0
 
 ### Minor Changes
