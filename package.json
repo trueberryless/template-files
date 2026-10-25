@@ -1,6 +1,6 @@
 {
   "name": "template-files",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Provide single point of truth for template files",
   "homepage": "https://github.com/trueberryless-org/template-files",
   "bugs": {
