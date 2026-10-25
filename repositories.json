@@ -55,9 +55,9 @@
       "preset": "plugin"
     },
     {
-      "name": "trueberryless/true-tracker",
+      "name": "trueberryless/time-tracker",
       "preset": "site",
-      "homepage": "https://true-tracker.felixs.dev"
+      "homepage": "https://time-tracker.felixs.dev"
     },
     {
       "name": "trueberryless/releases",
