@@ -162,6 +162,32 @@
       "preset": "site",
       "ci": true,
       "homepage": "https://release-image-generator.netlify.app/"
+    },
+    {
+      "name": "trueberryless/astro-changelog",
+      "preset": "site",
+      "homepage": "https://astro-changelog.netlify.app/"
+    },
+    {
+      "name": "trueberryless/starlight-changelog",
+      "preset": "site",
+      "homepage": "https://starlight-changelog.netlify.app/"
+    },
+    {
+      "name": "trueberryless/git-diff-viewer",
+      "preset": "site",
+      "homepage": "https://git-diff-viewer.netlify.app/"
+    },
+    {
+      "name": "trueberryless/mutanuq",
+      "preset": "site",
+      "homepage": "https://mutanuq.netlify.app/"
+    },
+    {
+      "name": "trueberryless/trueberryless-org",
+      "preset": "site",
+      "ci": true,
+      "homepage": "https://trueberryless-org.trueberryless.org/"
     }
   ]
 }
