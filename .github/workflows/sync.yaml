@@ -139,12 +139,6 @@ jobs:
           name: final-summary
           path: summary/final_summary.md
 
-      - name: Upload discord summary
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: discord-summary
-          path: summary/discord_summary.md
-
       - name: Display summary in the GitHub Actions summary
         run: cat summary/final_summary.md >> "$GITHUB_STEP_SUMMARY"
 
@@ -179,27 +173,16 @@ jobs:
           file: CHANGELOG.md
           pattern: ${{ needs.image-tag.outputs.IMAGE_TAG }}
 
-      - name: Download summary artifacts
+      - name: Download summary artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: final-summary
-
-      - name: Download summary artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: discord-summary
 
       - name: Save summary into Github environment variable
         run: |
           {
             echo "SYNC_SUMMARY<<EOF"
             cat final_summary.md
-            echo "EOF"
-          } >> "$GITHUB_ENV"
-
-          {
-            echo "DISCORD_SUMMARY<<EOF"
-            cat discord_summary.md
             echo "EOF"
           } >> "$GITHUB_ENV"
 
@@ -213,12 +196,3 @@ jobs:
 
             ${{ env.SYNC_SUMMARY }}
           skipIfReleaseExists: true
-
-      - name: Check if release was created
-        id: check_release
-        run: |
-          if [ -z "${{ steps.create_release.outputs.html_url }}" ]; then
-            echo "RELEASE_SKIPPED=true" >> "$GITHUB_ENV"
-          else
-            echo "RELEASE_SKIPPED=false" >> "$GITHUB_ENV"
-          fi

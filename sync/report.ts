@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-import { formatList, formatTable, formatWorkflowLinks } from "./summary.ts";
+import { formatTable, formatWorkflowLinks } from "./summary.ts";
 import type { SyncSummary } from "./types.ts";
 
 const directory = resolve(process.argv[2] ?? "summary");
@@ -22,8 +22,4 @@ const links = formatWorkflowLinks(
 writeFileSync(
   join(directory, "final_summary.md"),
   formatTable(summaries, links)
-);
-writeFileSync(
-  join(directory, "discord_summary.md"),
-  formatList(summaries, links)
 );
