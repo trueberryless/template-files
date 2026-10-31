@@ -140,7 +140,7 @@ export function upsertPullRequest(
       "--head",
       BRANCH_NAME,
       "--title",
-      "ci: sync template files [skip ci]",
+      "ci: sync template files",
       "--body",
       body,
       "--label",
