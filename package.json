@@ -26,17 +26,17 @@
   },
   "dependencies": {
     "sort-package-json": "^4.0.0",
-    "yaml": "^2.9.0",
+    "yaml": "^2.9.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
-    "@types/node": "^26.6.3",
-    "oxlint": "^1.86.0",
-    "prettier": "3.9.9",
-    "prettier-plugin-astro": "1.1.0",
+    "@types/node": "^26.6.5",
+    "oxlint": "^1.87.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.1",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"
   },
