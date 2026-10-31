@@ -61,6 +61,8 @@
     {
       "name": "trueberryless/time-tracker",
       "preset": "site",
+      "formatter": "oxfmt",
+      "skip": [".oxfmtrc.json"],
       "homepage": "https://time-tracker.felixs.dev"
     },
     {
