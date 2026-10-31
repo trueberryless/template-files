@@ -1,5 +1,21 @@
 # template-files
 
+## 0.19.0
+
+### Minor Changes
+
+- [#381](https://github.com/trueberryless/template-files/pull/381) [`381b712`](https://github.com/trueberryless/template-files/commit/381b712f0a6d2d969f5ff19780ed3220de28ebc6) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Removes the Discord release notification from the `publish.yaml` template and the Discord summary from the sync workflow.
+
+- [#382](https://github.com/trueberryless/template-files/pull/382) [`3dd1bca`](https://github.com/trueberryless/template-files/commit/3dd1bca9bea202df1a813fa5cfbe87ac22255e4f) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Removes `[skip netlify]` from the release pull request titles and `[skip ci]` from the sync pull request title. When such a pull request was squash-merged, the marker ended up in the commit on `main`, which skipped the production deploy and the CI run there.
+
+- [#377](https://github.com/trueberryless/template-files/pull/377) [`b88afda`](https://github.com/trueberryless/template-files/commit/b88afda17a808395e6aa74e44428c555f98356a3) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds `astro-changelog`, `starlight-changelog`, `git-diff-viewer`, `mutanuq` and `trueberryless-org` to the synced repositories, all with the `site` preset and `trueberryless-org` with the `ci` option.
+
+- [#376](https://github.com/trueberryless/template-files/pull/376) [`d8c03b6`](https://github.com/trueberryless/template-files/commit/d8c03b6b3839453e8db9cee0974b68a38e1831f7) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds `starlight-compass` to the synced repositories with the `plugin` preset.
+
+### Patch Changes
+
+- [#380](https://github.com/trueberryless/template-files/pull/380) [`9de0226`](https://github.com/trueberryless/template-files/commit/9de0226a9a9d933435f3224f23da831e7ade3e74) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Syncs `time-tracker` with the `oxfmt` formatter and keeps its own `.oxfmtrc.json`, so the sync no longer adds a Prettier config and reformats the repository with Prettier.
+
 ## 0.18.2
 
 ### Patch Changes
