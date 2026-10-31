@@ -57,7 +57,12 @@ pnpm merge   # merge the open sync pull requests, needs GH_TOKEN; OWNER, DRY_RUN
 .
 ├── .changeset
 │   ├── README.md
-│   └── config.json
+│   ├── config.json
+│   ├── remove-discord.md
+│   ├── stop-skipping-deploys.md
+│   ├── sync-more-sites.md
+│   ├── sync-starlight-compass.md
+│   └── time-tracker-oxfmt.md
 ├── .github
 │   ├── labeler.yaml
 │   ├── readmetreerc.yaml
