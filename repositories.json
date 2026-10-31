@@ -55,6 +55,10 @@
       "preset": "plugin"
     },
     {
+      "name": "trueberryless/starlight-compass",
+      "preset": "plugin"
+    },
+    {
       "name": "trueberryless/time-tracker",
       "preset": "site",
       "homepage": "https://time-tracker.felixs.dev"
