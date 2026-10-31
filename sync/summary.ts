@@ -17,24 +17,6 @@ export function formatTable(items: SyncSummary[], links: string | undefined) {
   ].join("\n");
 }
 
-export function formatList(items: SyncSummary[], links: string | undefined) {
-  const lines = items.map(({ changedFiles, pullRequestUrl, repository }) => {
-    if (changedFiles === 0) {
-      return `- ${repository} -- No files changed`;
-    }
-
-    return `- ${repository} -- ${changedFiles} ${changedFiles === 1 ? "file" : "files"} changed: ([PR Link](${pullRequestUrl}))`;
-  });
-
-  return [
-    "### Summary of Changes",
-    "",
-    ...lines,
-    "",
-    ...(links ? [links, ""] : []),
-  ].join("\n");
-}
-
 export function formatWorkflowLinks(
   serverUrl: string | undefined,
   repository: string | undefined

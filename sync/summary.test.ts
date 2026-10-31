@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { formatList, formatTable, formatWorkflowLinks } from "./summary.ts";
+import { formatTable, formatWorkflowLinks } from "./summary.ts";
 
 const summaries = [
   { changedFiles: 2, pullRequestUrl: "https://github.com/owner/a/pull/1", repository: "owner/a" },
@@ -47,16 +47,3 @@ describe("formatTable", () => {
   });
 });
 
-describe("formatList", () => {
-  test("describes the changes per repository", () => {
-    expect(formatList(summaries, undefined)).toBe(
-      [
-        "### Summary of Changes",
-        "",
-        "- owner/a -- 2 files changed: ([PR Link](https://github.com/owner/a/pull/1))",
-        "- owner/b -- No files changed",
-        "",
-      ].join("\n")
-    );
-  });
-});
