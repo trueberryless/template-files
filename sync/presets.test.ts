@@ -98,10 +98,20 @@ describe('getOperations', () => {
     expect(targets(true)).toContain('.github/workflows/ci.yaml')
   })
 
-  test.each(['site', 'plugin', 'tooling'] as const)('adds the supply chain workflow to the %s preset', (preset) => {
+  test.each(['site', 'plugin', 'tooling'] as const)('adds the supply chain workflow to the %s preset without CI', (preset) => {
     const targets = getOperations({ branch: 'main', ci: false, skip: [], formatter: 'prettier', name: 'owner/repo', preset }).map(({ target }) => target)
 
     expect(targets).toContain('.github/workflows/supply-chain.yaml')
+  })
+
+  test('runs Socket Firewall inside the CI workflow when it is synced', () => {
+    const targets = getOperations({ branch: 'main', ci: true, skip: [], formatter: 'prettier', name: 'owner/repo', preset: 'site' }).map(({ target }) => target)
+    const ciTemplate = readFileSync(resolve(templatesPath, '.github/workflows/ci.yaml'), 'utf8')
+
+    expect(targets).toContain('.github/workflows/ci.yaml')
+    expect(targets).not.toContain('.github/workflows/supply-chain.yaml')
+    expect(ciTemplate).toContain('sfw pnpm install --frozen-lockfile')
+    expect(ciTemplate).toContain('needs: [check, test, e2e, supply-chain]')
   })
 
   test('places plugin files in the package directory', () => {

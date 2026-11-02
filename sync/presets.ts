@@ -42,15 +42,20 @@ function getCommonOperations(
       props
     ),
     copy(
-      ".github/workflows/supply-chain.yaml",
-      ".github/workflows/supply-chain.yaml",
-      props
-    ),
-    copy(
       ".github/workflows/welcome-bot.yaml",
       ".github/workflows/welcome-bot.yaml",
       props
     ),
+    // Repositories with the synced CI workflow run Socket Firewall as a job there instead.
+    ...(hasCiWorkflow(repository)
+      ? []
+      : [
+          copy(
+            ".github/workflows/supply-chain.yaml",
+            ".github/workflows/supply-chain.yaml",
+            props
+          ),
+        ]),
     copy("LICENSE", "LICENSE", props),
     addMissingLines(".gitignore/Node.gitignore", ".gitignore", props),
     ...(isOxfmt
@@ -129,8 +134,12 @@ function getPresetOperations(
   }
 }
 
+function hasCiWorkflow(repository: Repository) {
+  return repository.preset === "site" && repository.ci;
+}
+
 function getSiteOperations(repository: Repository, props: Props): Operation[] {
-  if (!repository.ci) {
+  if (!hasCiWorkflow(repository)) {
     return [];
   }
 
