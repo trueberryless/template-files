@@ -42,6 +42,11 @@ function getCommonOperations(
       props
     ),
     copy(
+      ".github/workflows/supply-chain.yaml",
+      ".github/workflows/supply-chain.yaml",
+      props
+    ),
+    copy(
       ".github/workflows/welcome-bot.yaml",
       ".github/workflows/welcome-bot.yaml",
       props

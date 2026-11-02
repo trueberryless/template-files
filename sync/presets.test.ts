@@ -98,6 +98,12 @@ describe('getOperations', () => {
     expect(targets(true)).toContain('.github/workflows/ci.yaml')
   })
 
+  test.each(['site', 'plugin', 'tooling'] as const)('adds the supply chain workflow to the %s preset', (preset) => {
+    const targets = getOperations({ branch: 'main', ci: false, skip: [], formatter: 'prettier', name: 'owner/repo', preset }).map(({ target }) => target)
+
+    expect(targets).toContain('.github/workflows/supply-chain.yaml')
+  })
+
   test('places plugin files in the package directory', () => {
     const targets = getOperations({ branch: 'main', ci: false, skip: [], formatter: 'prettier', name: 'owner/repo', package: '@owner/repo', preset: 'plugin' }).map(
       ({ target }) => target,
