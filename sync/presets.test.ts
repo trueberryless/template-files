@@ -90,12 +90,19 @@ describe('getOperations', () => {
     expect(targets).not.toContain('.oxfmtrc.json')
   })
 
-  test('only adds CI files when requested', () => {
+  test('only adds the test tooling when requested', () => {
     const base = { branch: 'main', name: 'owner/repo', preset: 'site', skip: [] as string[], formatter: 'prettier' } as const
     const targets = (ci: boolean) => getOperations({ ...base, ci }).map(({ target }) => target)
 
-    expect(targets(false)).not.toContain('.github/workflows/ci.yaml')
-    expect(targets(true)).toContain('.github/workflows/ci.yaml')
+    expect(targets(false)).not.toContain('.oxlintrc.json')
+    expect(targets(true)).toContain('.oxlintrc.json')
+    expect(targets(false)).toContain('.github/workflows/ci.yaml')
+  })
+
+  test.each(['site', 'plugin', 'tooling'] as const)('adds the CI workflow to the %s preset as the last operation', (preset) => {
+    const operations = getOperations({ branch: 'main', ci: false, skip: [], formatter: 'prettier', name: 'owner/repo', preset })
+
+    expect(operations.at(-1)).toMatchObject({ target: '.github/workflows/ci.yaml', type: 'ci' })
   })
 
   test('places plugin files in the package directory', () => {

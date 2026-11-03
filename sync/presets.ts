@@ -10,6 +10,8 @@ export function getOperations(repository: Repository): Operation[] {
   return [
     ...getCommonOperations(repository, props),
     ...getPresetOperations(repository, props),
+    // Last, so the workflow is trimmed to the package.json scripts as the other operations left them.
+    ci(".github/workflows/ci.yaml", ".github/workflows/ci.yaml", props),
   ].filter((operation) => !isSkipped(operation, repository.skip));
 }
 
@@ -130,7 +132,6 @@ function getSiteOperations(repository: Repository, props: Props): Operation[] {
   }
 
   return [
-    copy(".github/workflows/ci.yaml", ".github/workflows/ci.yaml", props),
     copy(".oxlintrc.json", ".oxlintrc.json", props),
     mergeJson(
       repository.formatter === "oxfmt"
@@ -168,6 +169,10 @@ function getRootPackageOperations(
 
 function copy(source: string, target: string, props: Props): Operation {
   return { props, source, target, type: "copy" };
+}
+
+function ci(source: string, target: string, props: Props): Operation {
+  return { props, source, target, type: "ci" };
 }
 
 function mergeJson(source: string, target: string, props: Props): Operation {

@@ -7,6 +7,7 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 
+import { adaptCiWorkflow, readProject } from "./ci.ts";
 import {
   addMissingLines,
   mergeJsonText,
@@ -54,6 +55,13 @@ export function applyOperation(
 
   mkdirSync(dirname(target), { recursive: true });
 
+  if (operation.type === "ci") {
+    const content = adaptCiWorkflow(template, readProject(targetPath));
+
+    writeFileSync(target, content);
+    return { theirs: content };
+  }
+
   if (operation.type === "copy" && context) {
     const merge = mergeSyncedFile(
       {
@@ -76,7 +84,7 @@ export function applyOperation(
 }
 
 function getContent(
-  type: Exclude<Operation["type"], "delete">,
+  type: Exclude<Operation["type"], "delete" | "ci">,
   existing: string | undefined,
   template: string
 ) {

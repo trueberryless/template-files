@@ -19,11 +19,13 @@ A repository entry only needs `name` and `preset`. Everything else is optional:
 | `package`       | the repository name              | npm package name, may be scoped                            |
 | `homepage`      | `https://<repository>.netlify.app/` | `homepage` in every synced `package.json`               |
 | `branch`        | `main`                           | Default branch                                             |
-| `ci`            | `false`                          | Also sync the CI workflow, oxlint config and test tooling  |
+| `ci` | `false` | Also add the oxlint config and the `lint`, `knip`, `format` and test scripts, with oxlint, knip, Vitest and Playwright as dev dependencies |
 | `skip`          | `[]`                             | Template targets or sources to leave alone, e.g. `.prettierrc` |
 | `formatter`     | `prettier`                       | `oxfmt` syncs the oxfmt config, workflow and scripts instead of Prettier's |
 
 Templates use `<%= property %>` placeholders. Besides the properties above, `owner`, `repositoryName`, `repositoryUrl`, `packageDirectory` and `branchName` are available, so moving a repository to another account only requires changing its `name`.
+
+Every repository also gets the CI workflow from [`ci.yaml`](./templates/.github/workflows/ci.yaml), trimmed to what the repository can actually run. Steps that call a `package.json` script the repository doesn't have are left out, and a job with nothing left to run is removed. The end-to-end job only stays when there is a Playwright config, and the test job runs `pnpm test` when there is no `test:coverage` script. The Socket Firewall job always stays, so every pull request installs its dependencies through the firewall. Because the workflow is trimmed after all other files are synced, the scripts that the `ci` option adds already count.
 
 Each sync also writes `.github/template-files.json` into the repository. It records the template-files commit the sync ran on and, for every synced file, a hash of what the template produced. The next sync uses it for **copy** targets to tell your own changes apart from an outdated file: a file you changed since the last sync stays as it is, and if the template changed too, the two changes are merged. When they touch the same lines, your version stays and the pull request lists the template's changes under "Not applied", so you can apply them by hand. In a repository without the lock file, copied files are overwritten, and the [three-way sync](./docs/three-way-sync.md) document explains the details.
 
