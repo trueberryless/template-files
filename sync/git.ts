@@ -54,6 +54,14 @@ export function stageChanges(directory: string) {
     .filter(Boolean);
 }
 
+export function hasChanges(directory: string) {
+  return run("git", ["status", "--porcelain"], directory) !== "";
+}
+
+export function getHeadCommit(directory: string) {
+  return run("git", ["rev-parse", "HEAD"], directory);
+}
+
 export function hasChangedFile(directory: string, fileName: string) {
   return run("git", ["status", "--porcelain"], directory)
     .split("\n")
