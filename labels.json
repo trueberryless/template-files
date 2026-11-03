@@ -1,0 +1,202 @@
+{
+  "labels": [
+    {
+      "name": "🚨 action",
+      "color": "A75AD5",
+      "description": "Changes in GitHub workflows or actions",
+      "aliases": ["github_actions"]
+    },
+    {
+      "name": "♿ accessibility",
+      "color": "F143AB",
+      "description": "Barrier affecting people with disabilities",
+      "aliases": ["accessibility"]
+    },
+    {
+      "name": "🤖 bot",
+      "color": "0075CA",
+      "description": "Automatically generated pull request",
+      "aliases": ["renovate"]
+    },
+    {
+      "name": "🐛 bug",
+      "color": "D73A4A",
+      "description": "Something isn't working",
+      "aliases": ["bug"]
+    },
+    {
+      "name": "📝 changeset",
+      "color": "304EF9",
+      "description": "Contains changeset files"
+    },
+    {
+      "name": "👍 claude-ok",
+      "color": "0E8A16",
+      "description": "trueberryless-bot may implement this",
+      "aliases": ["claude-ok"]
+    },
+    {
+      "name": "🙅 claude-skip",
+      "color": "B60205",
+      "description": "trueberryless-bot leaves this alone",
+      "aliases": ["claude-skip"]
+    },
+    {
+      "name": "🚧 config",
+      "color": "C0ED4F",
+      "description": "Configuration file updates"
+    },
+    {
+      "name": "✒️ documentation",
+      "color": "66741D",
+      "description": "Documentation updates, like README changes",
+      "aliases": ["documentation"]
+    },
+    {
+      "name": "🔁 duplicate",
+      "color": "008672",
+      "description": "This issue or pull request already exists",
+      "aliases": ["duplicate"]
+    },
+    {
+      "name": "⏫ enhancement",
+      "color": "3C11FD",
+      "description": "New feature or request",
+      "aliases": ["enhancement"]
+    },
+    {
+      "name": "🥇 good first issue",
+      "color": "7057FF",
+      "description": "Good for newcomers",
+      "aliases": ["good first issue"]
+    },
+    {
+      "name": "🆘 help wanted",
+      "color": "BFD4F2",
+      "description": "Extra attention is needed",
+      "aliases": ["help wanted"]
+    },
+    {
+      "name": "🌏 i18n",
+      "color": "006B75",
+      "description": "Updates to internationalized docs, excluding English"
+    },
+    {
+      "name": "👀 invalid",
+      "color": "E4E669",
+      "description": "This doesn't seem right",
+      "aliases": ["invalid"]
+    },
+    {
+      "name": "🙋 needs-human",
+      "color": "FBCA04",
+      "description": "trueberryless-bot could not fix this",
+      "aliases": ["needs-human"]
+    },
+    {
+      "name": "📦 package",
+      "color": "F34A37",
+      "description": "Updates in package structure or package.json",
+      "aliases": ["dependencies", "javascript"]
+    },
+    {
+      "name": "❓ question",
+      "color": "D876E3",
+      "description": "Further information is requested",
+      "aliases": ["question"]
+    },
+    {
+      "name": "🔎 renovate-review",
+      "color": "1D76DB",
+      "description": "Dependency update that needs a manual review",
+      "aliases": ["renovate-review"]
+    },
+    {
+      "name": "🏯 styles",
+      "color": "550F5A",
+      "description": "Stylesheets or design updates"
+    },
+    {
+      "name": "🔍 triaged",
+      "color": "C5DEF5",
+      "description": "Labelled by trueberryless-bot after a first look",
+      "aliases": ["triaged"]
+    },
+    {
+      "name": "🔒 wontfix",
+      "color": "FFFFFF",
+      "description": "This will not be worked on",
+      "aliases": ["wontfix"]
+    }
+  ],
+  "repositories": {
+    "trueberryless/awesome-atproto": [
+      {
+        "name": "automated issue",
+        "color": "BFDADC",
+        "description": "Opened by a workflow"
+      },
+      {
+        "name": "report",
+        "color": "C2E0C6",
+        "description": "Link check report"
+      }
+    ],
+    "trueberryless/blog": [
+      {
+        "name": "🚧 astro",
+        "color": "FF5D01",
+        "description": "Astro setup and integrations"
+      },
+      {
+        "name": "📀 assets",
+        "color": "FEF2C0",
+        "description": "Images and other assets"
+      },
+      {
+        "name": "📚 content",
+        "color": "0E8A16",
+        "description": "Blog posts and other content"
+      },
+      {
+        "name": "🈳 dictionary",
+        "color": "D4C5F9",
+        "description": "Spell checker dictionary"
+      }
+    ],
+    "trueberryless/favorite-contributors": [
+      {
+        "name": "opt-out",
+        "color": "D73A4A",
+        "description": "Request to be removed from the data"
+      }
+    ],
+    "trueberryless/lunaria-diff-extension": [
+      {
+        "name": "autorelease: pending",
+        "color": "EDEDED",
+        "description": "Release pull request opened by release-please"
+      }
+    ],
+    "trueberryless/meta": [
+      {
+        "name": "📊 dashboard",
+        "color": "0E8A16",
+        "description": "The one issue trueberryless-bot keeps current",
+        "aliases": ["dashboard"]
+      }
+    ],
+    "trueberryless/opendeck.space": [
+      {
+        "name": "translation",
+        "color": "1D76DB",
+        "description": "Translation reviews and fixes"
+      },
+      {
+        "name": "translation-approved",
+        "color": "2EA043",
+        "description": "Approved review: a bot applies it in a translation pull request"
+      }
+    ]
+  }
+}
