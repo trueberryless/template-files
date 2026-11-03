@@ -1,59 +1,55 @@
 # Three-way sync
 
-Today a `copy` operation overwrites whatever a repository changed in a synced file, and `merge-json`, `merge-yaml` and `add-missing-lines` only keep additions. If I adjust a synced file in one repository, the next sync either throws the change away or I have to `skip` the whole file. This document describes how the sync can tell a local change apart from an outdated file, so local changes made after a sync win and template changes still arrive.
+The sync used to treat every repository as if nobody had touched its synced files. A `copy` operation overwrote the file, and the JSON merge put the template's values back over yours. So if you adjusted a synced workflow in one repository, the next sync either threw that change away or you had to `skip` the whole file. The three-way sync fixes this by remembering what the template looked like at each repository's last sync. With that, the sync can tell a change you made on purpose apart from a file that is simply outdated, and keep your change while still bringing in the template's.
 
-## Idea
+## Three versions of a file
 
-For every synced file there are three versions:
+For every synced file, the sync looks at three versions:
 
-- **base**: the template as it was rendered at the last sync of this repository
-- **ours**: the file in the repository now
-- **theirs**: the template as it is rendered now
+- the **base**, which is the template as it was rendered at the repository's last sync,
+- **ours**, which is the file in the repository now,
+- **theirs**, which is the template as it is rendered now.
 
-This is the same model [Copier](https://copier.readthedocs.io/) uses for `copier update`: it records the template commit a project was generated from and does a three-way merge against it.
+Comparing ours with the base shows what changed in the repository, and comparing theirs with the base shows what changed in the template. This is the same idea [Copier](https://copier.readthedocs.io/) uses for `copier update`, where a project records the template commit it was generated from and later updates merge against it.
 
-## Lock file
+## The lock file
 
-Each synced repository gets a small `.github/template-files.json` written by the sync:
+To know the base, every synced repository keeps a lock file at `.github/template-files.json`, which the sync writes itself:
 
 ```json
 {
-  "commit": "9de0226…",
+  "commit": "b9a5cca…",
   "files": {
-    ".github/workflows/ci.yaml": "sha256-…"
+    ".github/workflows/format.yaml": "sha256-…",
+    "LICENSE": "sha256-…"
   }
 }
 ```
 
-`commit` is the template-files commit of the last sync, so the base can be rendered again with `git show <commit>:templates/<source>` and the repository's props. The hashes are only a shortcut: when the hash of ours equals the hash of base, nothing changed locally and no merge is needed.
+`commit` is the template-files commit of the last sync. Because each template can be read back at that commit with `git show <commit>:templates/<source>` and rendered with the repository's properties, the base doesn't need to be stored in the repository. The hashes are a shortcut: each one is the hash of what the template produced for that file, so if your file still has the same hash, you haven't changed it and no merge is needed.
 
-## Per file
+The sync rewrites the lock file only when it changes something else in the repository, when the lock file is missing, or when it has to report a conflict. Otherwise every new template-files commit would open a pull request in every repository just to update the commit.
 
-1. ours equals base: there is no local change, so write theirs (what `copy` does today).
-2. theirs equals base: the template did not change, so keep ours.
-3. Both changed: run `git merge-file -p ours base theirs`.
-   - A clean merge is written to the file.
-   - On a conflict the file stays as ours, and the pull request body lists it with the template diff in a `<details>` block, so I can apply it by hand. Conflict markers never end up in a commit, because CI would fail on them.
+## What happens to a copied file
 
-For `merge-json` and `merge-yaml` the same rules apply per key path instead of per line: a key the template changed since base is updated unless ours changed that same key too.
+For a `copy` target, the sync goes through these cases in order:
 
-Generated files like the trimmed `ci.yaml` are compared after trimming, so a repository without tests does not look like it deleted the test job.
+1. If the repository doesn't have the file yet, or it already matches the template, the sync writes the template.
+2. If the lock file has no entry for the file, the sync can't tell your change apart from an outdated file, so it writes the template as it always did. This is what happens in a repository's first sync after the lock file was introduced.
+3. If your file still matches the hash in the lock file, you haven't changed it, so the template's new version replaces it.
+4. If you changed the file but the template didn't change since the last sync, your version stays as it is.
+5. If both changed, the sync merges the two with `git merge-file`. When the changes are on different lines, the merged file is written. When they touch the same lines, your version stays.
 
-## First sync with a lock file
+Whenever your version stays because of a conflict, the sync pull request has a "Not applied" section with the template's changes as a diff, so you can apply them by hand. Conflict markers never end up in a commit, because the repository's CI would fail on them. The same happens when the base can't be rendered anymore, for example because an older template uses a property the repository no longer has.
 
-Repositories that were synced before have no lock file. For them the base is the template at the last release tag, because that is what their last sync PR contained. Every later sync writes the lock file in the same pull request.
+## What is not covered yet
 
-## Opting out
+Only `copy` targets are merged this way so far. The JSON and YAML merges for `package.json` and `pnpm-workspace.yaml` don't look at the lock file yet. They should work per key, so that a value the template changed since the base is updated unless you changed the same key in the repository.
 
-`skip` stays for files a repository owns completely. A new `strategy` per target in `repositories.json` (`"overwrite"`, `"three-way"`) allows forcing today's behavior for a file, for example a `LICENSE`.
+The generated CI workflow, which the sync trims to each repository's scripts, should go through the merge as well. It needs to compare the trimmed versions, because otherwise a repository without tests would look like it deleted the test job.
 
-## Later: other forges
+Once that works, repositories with workflows of their own, like `opendeck.space`, `pronouns.blue` and `astro-docs-i18n-reviewer`, can join the sync without losing their changes. A `strategy` option per target in `repositories.json` could then force the old overwrite for files that a repository should never change, like the `LICENSE`.
 
-The planning step (render, compare, merge) only needs file contents and the lock file, so it can stay free of GitHub. Cloning, pushing and opening the pull request would move behind a small forge interface with GitHub as the first implementation. Before writing that interface myself, I want to check the `forges` npm package and how Bingo handles its transitions, since both might cover parts of it.
+## Other forges
 
-## Steps
-
-1. Write the lock file on every sync, without changing any merge behavior yet.
-2. Add the three-way merge for `copy` targets and list conflicts in the pull request body.
-3. Move `merge-json` and `merge-yaml` to per-key three-way merges.
-4. Onboard the repositories with custom workflows (`opendeck.space`, `pronouns.blue`, `astro-docs-i18n-reviewer`), which only works well after step 2.
+Rendering, comparing and merging only need file contents and the lock file, so that part doesn't depend on GitHub. Cloning, pushing and opening the pull request could move behind a small forge interface, with GitHub as the first implementation. Before you write that interface, it is worth checking the `forges` npm package and how [Bingo](https://www.create.bingo/) keeps repositories up to date with their templates, since either might already cover part of it.
