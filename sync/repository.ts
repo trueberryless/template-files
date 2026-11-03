@@ -1,4 +1,5 @@
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -16,10 +17,13 @@ import {
   createBranch,
   forcePushBranch,
   getAuthentication,
+  getHeadCommit,
   getRepositoryUrl,
   hasChangedFile,
+  hasChanges,
   stageChanges,
 } from "./git.ts";
+import { LOCK_FILE, createLockFile, serializeLockFile } from "./lock.ts";
 import { applyOperation } from "./operations.ts";
 import { getOperations } from "./presets.ts";
 import {
@@ -30,9 +34,10 @@ import {
   upsertPullRequest,
 } from "./pull-request.ts";
 import { run } from "./shell.ts";
-import type { SyncSummary } from "./types.ts";
+import type { Operation, SyncSummary } from "./types.ts";
 
-const TEMPLATES_PATH = resolve(import.meta.dirname, "../templates");
+const ROOT_PATH = resolve(import.meta.dirname, "..");
+const TEMPLATES_PATH = join(ROOT_PATH, "templates");
 
 export function syncRepository(
   repository: Repository,
@@ -75,6 +80,8 @@ export function syncRepository(
       );
     }
 
+    writeLockFile(checkout, operations);
+
     const changedFiles = stageChanges(checkout).length;
 
     if (changedFiles === 0) {
@@ -116,6 +123,29 @@ export function writeSummary(summary: SyncSummary, directory: string) {
     join(directory, `${summary.repository.replace("/", "-")}.json`),
     JSON.stringify(summary)
   );
+}
+
+/**
+ * Records what this sync wrote, so a later sync can tell a change made in the repository apart from an outdated file.
+ * It is only rewritten together with other changes, so a new template-files commit alone opens no pull requests.
+ */
+function writeLockFile(checkout: string, operations: Operation[]) {
+  const path = join(checkout, LOCK_FILE);
+  if (existsSync(path) && !hasChanges(checkout)) return;
+
+  const files: [string, string][] = [];
+
+  for (const operation of operations) {
+    const target = join(checkout, operation.target);
+    if (operation.type === "delete" || !existsSync(target)) continue;
+
+    files.push([operation.target, readFileSync(target, "utf8")]);
+  }
+
+  const commit = process.env["GITHUB_SHA"] ?? getHeadCommit(ROOT_PATH);
+
+  mkdirSync(join(checkout, ".github"), { recursive: true });
+  writeFileSync(path, serializeLockFile(createLockFile(commit, files)));
 }
 
 function getChangelogEntry(hash: string) {

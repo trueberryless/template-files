@@ -25,6 +25,8 @@ A repository entry only needs `name` and `preset`. Everything else is optional:
 
 Templates use `<%= property %>` placeholders. Besides the properties above, `owner`, `repositoryName`, `repositoryUrl`, `packageDirectory` and `branchName` are available, so moving a repository to another account only requires changing its `name`.
 
+Each sync also writes `.github/template-files.json` to the repository: the template-files commit it ran on and a hash of every file as the sync left it. Nothing reads it yet. It is the first step of the [three-way sync](./docs/three-way-sync.md), which will use it to keep changes made in a repository after its last sync.
+
 Files are synced in one of these ways:
 
 - **copy**: the file is replaced.
