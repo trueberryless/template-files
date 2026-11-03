@@ -17,6 +17,7 @@
     "check": "tsc",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "labels": "node sync/labels-all.ts",
     "lint": "oxlint",
     "merge": "node sync/merge-all.ts",
     "report": "node sync/report.ts",

@@ -69,7 +69,8 @@ export function upsertPullRequest(
   repository: string,
   branch: string,
   changelogEntry: string,
-  cwd: string
+  cwd: string,
+  notes?: string
 ) {
   const existing = findOpenPullRequest(repository, cwd);
 
@@ -99,7 +100,7 @@ export function upsertPullRequest(
         "--repo",
         repository,
         "--body",
-        `${body}\n${changelogEntry}`,
+        [body, changelogEntry, notes].filter(Boolean).join("\n"),
       ],
       cwd
     );
@@ -126,6 +127,7 @@ export function upsertPullRequest(
     "",
     "### Changes:",
     changelogEntry,
+    ...(notes ? ["", notes] : []),
   ].join("\n");
 
   return run(
