@@ -194,6 +194,26 @@
       "preset": "site",
       "ci": true,
       "homepage": "https://trueberryless-org.trueberryless.org/"
+    },
+    {
+      "name": "trueberryless/astro-blog-template",
+      "preset": "site",
+      "homepage": "https://astro-blog-template-trueberryless.netlify.app/"
+    },
+    {
+      "name": "trueberryless/astro-portfolio-template",
+      "preset": "site",
+      "homepage": "https://astro-portfolio-template-tbl.netlify.app/"
+    },
+    {
+      "name": "trueberryless/automatic-starlog-template",
+      "preset": "site",
+      "homepage": "https://github.com/trueberryless/automatic-starlog-template"
+    },
+    {
+      "name": "trueberryless/clemens.steinanet.at",
+      "preset": "site",
+      "homepage": "https://clemens.steinanet.at/"
     }
   ]
 }
