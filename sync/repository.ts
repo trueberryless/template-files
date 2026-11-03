@@ -77,6 +77,12 @@ export function syncRepository(
         context
       );
 
+      if (result.keyConflicts && result.keyConflicts.length > 0) {
+        conflicts.push(
+          formatKeyConflicts(operation.target, result.keyConflicts)
+        );
+      }
+
       if (operation.type === "copy" && result.theirs !== undefined) {
         templateVersions.set(operation.target, result.theirs);
 
@@ -225,6 +231,12 @@ function writeLockFile(
 
   mkdirSync(join(checkout, ".github"), { recursive: true });
   writeFileSync(path, serializeLockFile(createLockFile(commit, files)));
+}
+
+function formatKeyConflicts(target: string, paths: string[]) {
+  const keys = paths.map((path) => `\`${path}\``).join(", ");
+
+  return `- \`${target}\`: kept this repository's value for ${keys}, which the template changed too.`;
 }
 
 function formatConflict(target: string, diff: string) {

@@ -32,8 +32,8 @@ Each sync also writes `.github/template-files.json` into the repository. It reco
 Files are synced in one of these ways:
 
 - **copy**: the file is replaced, unless the repository changed it since the last sync (see above).
-- **merge-json**: the template is deep-merged into the existing file, its values win (`package.json`).
-- **merge-yaml**: the template provides defaults, existing values win and lists are unioned (`pnpm-workspace.yaml`).
+- **merge-json**: the template is deep-merged into the existing file and its values win (`package.json`). With a lock file, keys you changed since the last sync stay, see the [three-way sync](./docs/three-way-sync.md).
+- **merge-yaml**: the template provides defaults, existing values win and lists are unioned (`pnpm-workspace.yaml`). With a lock file, values the template changed reach keys you left as they were.
 - **add-missing-lines**: missing patterns are appended, existing lines are kept (`.gitignore`, `.prettierignore`).
 - **replace-license**: only the `## License` section of a README is replaced.
 - **delete**: obsolete files are removed.
