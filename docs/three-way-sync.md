@@ -42,13 +42,21 @@ For a `copy` target, the sync goes through these cases in order:
 
 Whenever your version stays because of a conflict, the sync pull request has a "Not applied" section with the template's changes as a diff, so you can apply them by hand. Conflict markers never end up in a commit, because the repository's CI would fail on them. The same happens when the base can't be rendered, for example because the template at the recorded commit uses a property the repository doesn't have.
 
+## What happens to package.json and pnpm-workspace.yaml
+
+The template for a JSON or YAML file only sets some of its keys, so these files are merged key by key instead of line by line. For every key the template sets, the sync compares your value with the base:
+
+- If you left the key as it was at the last sync, it gets the template's new value. A key the template no longer sets is removed, as long as you didn't change it.
+- If you changed the key and the template changed it too, your value stays and the pull request lists the key under "Not applied".
+- A key the template sets but the base doesn't know follows the file's usual rule: in `package.json` the template's value wins, and in `pnpm-workspace.yaml` your value wins.
+
+Lists in `pnpm-workspace.yaml`, like `packages`, are merged as a set, so your own entries stay and the ones the template drops are removed. Keys the template never sets, like `name` or your own scripts, are never touched. Without a base, for example in a repository that has no lock file, both files are merged the way the [file types](../README.md#how-it-works) in the README describe.
+
 ## Limits and open work
 
-The three-way merge applies to `copy` targets only. The JSON and YAML merges for `package.json` and `pnpm-workspace.yaml` don't use the lock file, and the plan is to merge them per key, so that a value the template changed since the base is updated unless you changed the same key in the repository.
+A CI workflow that the sync trims to a repository's scripts isn't merged this way. It should be, by comparing the trimmed versions with each other, because comparing them with the full template would make a repository without tests look like it deleted the test job.
 
-The generated CI workflow, which the sync trims to each repository's scripts, should go through the merge as well. It needs to compare the trimmed versions, because otherwise a repository without tests would look like it deleted the test job.
-
-With both in place, repositories with workflows of their own, like `opendeck.space`, `pronouns.blue` and `astro-docs-i18n-reviewer`, can join the sync without losing their changes. A `strategy` option per target in `repositories.json` could then force a plain overwrite for files that a repository should never change, like the `LICENSE`.
+Once the CI workflow is merged too, repositories with workflows of their own, like `opendeck.space`, `pronouns.blue` and `astro-docs-i18n-reviewer`, can join the sync without losing their changes. A `strategy` option per target in `repositories.json` could then force a plain overwrite for files that a repository should never change, like the `LICENSE`.
 
 ## Other forges
 

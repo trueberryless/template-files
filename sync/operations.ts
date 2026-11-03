@@ -6,6 +6,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
+import { parse, stringify } from "yaml";
 
 import {
   addMissingLines,
@@ -15,6 +16,7 @@ import {
 } from "./content.ts";
 import { mergeTextFiles } from "./git.ts";
 import { renderTemplate } from "./props.ts";
+import { type FileKind, mergeValues } from "./three-way-values.ts";
 import { type MergeResult, mergeSyncedFile } from "./three-way.ts";
 import type { Operation, Props } from "./types.ts";
 
@@ -26,6 +28,8 @@ export interface SyncContext {
 }
 
 export interface OperationResult {
+  /** Key paths of a JSON or YAML target where the repository's value stayed although the template changed it. */
+  keyConflicts?: string[];
   merge?: MergeResult;
   /** What the template-files side of the target is now, recorded in the lock file as the next sync's base. */
   theirs?: string;
@@ -69,10 +73,53 @@ export function applyOperation(
     return { merge, theirs: template };
   }
 
+  if (
+    (operation.type === "merge-json" || operation.type === "merge-yaml") &&
+    existing !== undefined &&
+    context
+  ) {
+    const base = context.renderBase(operation.source, operation.props);
+
+    if (base !== undefined) {
+      const kind: FileKind = operation.type === "merge-json" ? "json" : "yaml";
+      const { content, conflicts } = mergeStructuredText(
+        existing,
+        base,
+        template,
+        kind
+      );
+
+      writeFileSync(target, content);
+      return { keyConflicts: conflicts, theirs: content };
+    }
+  }
+
   const content = getContent(operation.type, existing, template);
 
   writeFileSync(target, content);
   return { theirs: content };
+}
+
+function mergeStructuredText(
+  ours: string,
+  base: string,
+  theirs: string,
+  kind: FileKind
+) {
+  const read = (text: string): unknown =>
+    kind === "json" ? JSON.parse(text) : parse(text);
+  const { conflicts, value } = mergeValues(
+    read(ours),
+    read(base),
+    read(theirs),
+    kind
+  );
+  const content =
+    kind === "json"
+      ? `${JSON.stringify(value, undefined, 2)}\n`
+      : stringify(value, { lineWidth: 0 });
+
+  return { conflicts, content };
 }
 
 function getContent(
