@@ -19,13 +19,13 @@ A repository entry only needs `name` and `preset`. Everything else is optional:
 | `package`       | the repository name              | npm package name, may be scoped                            |
 | `homepage`      | `https://<repository>.netlify.app/` | `homepage` in every synced `package.json`               |
 | `branch`        | `main`                           | Default branch                                             |
-| `ci` | `false` | Also sync the oxlint config and the test tooling (`vitest`, Playwright and their scripts) |
+| `ci` | `false` | Also add the oxlint config and the `lint`, `knip`, `format` and test scripts, with oxlint, knip, Vitest and Playwright as dev dependencies |
 | `skip`          | `[]`                             | Template targets or sources to leave alone, e.g. `.prettierrc` |
 | `formatter`     | `prettier`                       | `oxfmt` syncs the oxfmt config, workflow and scripts instead of Prettier's |
 
 Templates use `<%= property %>` placeholders. Besides the properties above, `owner`, `repositoryName`, `repositoryUrl`, `packageDirectory` and `branchName` are available, so moving a repository to another account only requires changing its `name`.
 
-Every repository gets the CI workflow from [`templates/.github/workflows/ci.yaml`](./templates/.github/workflows/ci.yaml), trimmed to what it can run: a step whose `package.json` script is missing is left out, the end-to-end job only stays with a Playwright config, the test job runs `pnpm test` when there is no `test:coverage` script, and the Socket Firewall job always runs.
+Every repository also gets the CI workflow from [`ci.yaml`](./templates/.github/workflows/ci.yaml), trimmed to what the repository can actually run. Steps that call a `package.json` script the repository doesn't have are left out, and a job with nothing left to run is removed. The end-to-end job only stays when there is a Playwright config, and the test job runs `pnpm test` when there is no `test:coverage` script. The Socket Firewall job always stays, so every pull request installs its dependencies through the firewall. Because the workflow is trimmed after all other files are synced, the scripts that the `ci` option adds already count.
 
 Files are synced in one of these ways:
 
