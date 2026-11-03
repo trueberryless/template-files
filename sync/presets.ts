@@ -10,6 +10,8 @@ export function getOperations(repository: Repository): Operation[] {
   return [
     ...getCommonOperations(repository, props),
     ...getPresetOperations(repository, props),
+    // Last, so the workflow is trimmed to the package.json scripts as the other operations left them.
+    ci(".github/workflows/ci.yaml", ".github/workflows/ci.yaml", props),
   ].filter((operation) => !isSkipped(operation, repository.skip));
 }
 
@@ -46,16 +48,6 @@ function getCommonOperations(
       ".github/workflows/welcome-bot.yaml",
       props
     ),
-    // Repositories with the synced CI workflow run Socket Firewall as a job there instead.
-    ...(hasCiWorkflow(repository)
-      ? []
-      : [
-          copy(
-            ".github/workflows/supply-chain.yaml",
-            ".github/workflows/supply-chain.yaml",
-            props
-          ),
-        ]),
     copy("LICENSE", "LICENSE", props),
     addMissingLines(".gitignore/Node.gitignore", ".gitignore", props),
     ...(isOxfmt
@@ -134,17 +126,12 @@ function getPresetOperations(
   }
 }
 
-function hasCiWorkflow(repository: Repository) {
-  return repository.preset === "site" && repository.ci;
-}
-
 function getSiteOperations(repository: Repository, props: Props): Operation[] {
-  if (!hasCiWorkflow(repository)) {
+  if (!repository.ci) {
     return [];
   }
 
   return [
-    copy(".github/workflows/ci.yaml", ".github/workflows/ci.yaml", props),
     copy(".oxlintrc.json", ".oxlintrc.json", props),
     mergeJson(
       repository.formatter === "oxfmt"
@@ -182,6 +169,10 @@ function getRootPackageOperations(
 
 function copy(source: string, target: string, props: Props): Operation {
   return { props, source, target, type: "copy" };
+}
+
+function ci(source: string, target: string, props: Props): Operation {
+  return { props, source, target, type: "ci" };
 }
 
 function mergeJson(source: string, target: string, props: Props): Operation {
