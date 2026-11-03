@@ -7,6 +7,7 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 
+import { adaptCiWorkflow, readProject } from "./ci.ts";
 import {
   addMissingLines,
   mergeJsonText,
@@ -37,11 +38,16 @@ export function applyOperation(
     : undefined;
 
   mkdirSync(dirname(target), { recursive: true });
-  writeFileSync(target, getContent(operation.type, existing, template));
+  writeFileSync(
+    target,
+    operation.type === "ci"
+      ? adaptCiWorkflow(template, readProject(targetPath))
+      : getContent(operation.type, existing, template)
+  );
 }
 
 function getContent(
-  type: Exclude<Operation["type"], "delete">,
+  type: Exclude<Operation["type"], "delete" | "ci">,
   existing: string | undefined,
   template: string
 ) {

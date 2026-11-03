@@ -90,28 +90,19 @@ describe('getOperations', () => {
     expect(targets).not.toContain('.oxfmtrc.json')
   })
 
-  test('only adds CI files when requested', () => {
+  test('only adds the test tooling when requested', () => {
     const base = { branch: 'main', name: 'owner/repo', preset: 'site', skip: [] as string[], formatter: 'prettier' } as const
     const targets = (ci: boolean) => getOperations({ ...base, ci }).map(({ target }) => target)
 
-    expect(targets(false)).not.toContain('.github/workflows/ci.yaml')
-    expect(targets(true)).toContain('.github/workflows/ci.yaml')
+    expect(targets(false)).not.toContain('.oxlintrc.json')
+    expect(targets(true)).toContain('.oxlintrc.json')
+    expect(targets(false)).toContain('.github/workflows/ci.yaml')
   })
 
-  test.each(['site', 'plugin', 'tooling'] as const)('adds the supply chain workflow to the %s preset without CI', (preset) => {
-    const targets = getOperations({ branch: 'main', ci: false, skip: [], formatter: 'prettier', name: 'owner/repo', preset }).map(({ target }) => target)
+  test.each(['site', 'plugin', 'tooling'] as const)('adds the CI workflow to the %s preset as the last operation', (preset) => {
+    const operations = getOperations({ branch: 'main', ci: false, skip: [], formatter: 'prettier', name: 'owner/repo', preset })
 
-    expect(targets).toContain('.github/workflows/supply-chain.yaml')
-  })
-
-  test('runs Socket Firewall inside the CI workflow when it is synced', () => {
-    const targets = getOperations({ branch: 'main', ci: true, skip: [], formatter: 'prettier', name: 'owner/repo', preset: 'site' }).map(({ target }) => target)
-    const ciTemplate = readFileSync(resolve(templatesPath, '.github/workflows/ci.yaml'), 'utf8')
-
-    expect(targets).toContain('.github/workflows/ci.yaml')
-    expect(targets).not.toContain('.github/workflows/supply-chain.yaml')
-    expect(ciTemplate).toContain('sfw pnpm install --frozen-lockfile')
-    expect(ciTemplate).toContain('needs: [check, test, e2e, supply-chain]')
+    expect(operations.at(-1)).toMatchObject({ target: '.github/workflows/ci.yaml', type: 'ci' })
   })
 
   test('places plugin files in the package directory', () => {
