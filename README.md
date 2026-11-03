@@ -71,7 +71,19 @@ pnpm merge   # merge the open sync pull requests, needs GH_TOKEN; OWNER, DRY_RUN
 .
 ├── .changeset
 │   ├── README.md
-│   └── config.json
+│   ├── ci-for-every-repo.md
+│   ├── config.json
+│   ├── label-sync.md
+│   ├── remove-discord.md
+│   ├── socket-firewall.md
+│   ├── stop-skipping-deploys.md
+│   ├── sync-lock-file.md
+│   ├── sync-more-sites.md
+│   ├── sync-starlight-compass.md
+│   ├── sync-starter-sites.md
+│   ├── three-way-copy.md
+│   ├── three-way-json-yaml.md
+│   └── time-tracker-oxfmt.md
 ├── .github
 │   ├── labeler.yaml
 │   ├── readmetreerc.yaml
@@ -82,6 +94,7 @@ pnpm merge   # merge the open sync pull requests, needs GH_TOKEN; OWNER, DRY_RUN
 │       ├── generate-readme-tree.yaml
 │       ├── labeler.yaml
 │       ├── merge-sync-prs.yaml
+│       ├── sync-labels.yaml
 │       ├── sync-repository.yaml
 │       ├── sync.yaml
 │       └── welcome-bot.yaml
@@ -92,18 +105,29 @@ pnpm merge   # merge the open sync pull requests, needs GH_TOKEN; OWNER, DRY_RUN
 ├── CHANGELOG.md
 ├── LICENSE
 ├── README.md
+├── docs
+│   └── three-way-sync.md
+├── labels.json
 ├── package.json
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 ├── repositories.json
 ├── sync
+│   ├── ci.test.ts
+│   ├── ci.ts
 │   ├── config.test.ts
 │   ├── config.ts
 │   ├── content.test.ts
 │   ├── content.ts
+│   ├── git-text.test.ts
 │   ├── git.test.ts
 │   ├── git.ts
 │   ├── index.ts
+│   ├── labels-all.ts
+│   ├── labels.test.ts
+│   ├── labels.ts
+│   ├── lock.test.ts
+│   ├── lock.ts
 │   ├── merge-all.ts
 │   ├── merge.test.ts
 │   ├── merge.ts
@@ -117,6 +141,10 @@ pnpm merge   # merge the open sync pull requests, needs GH_TOKEN; OWNER, DRY_RUN
 │   ├── shell.ts
 │   ├── summary.test.ts
 │   ├── summary.ts
+│   ├── three-way-values.test.ts
+│   ├── three-way-values.ts
+│   ├── three-way.test.ts
+│   ├── three-way.ts
 │   └── types.ts
 ├── templates
 │   ├── .changeset
