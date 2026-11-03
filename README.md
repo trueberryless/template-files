@@ -25,11 +25,11 @@ A repository entry only needs `name` and `preset`. Everything else is optional:
 
 Templates use `<%= property %>` placeholders. Besides the properties above, `owner`, `repositoryName`, `repositoryUrl`, `packageDirectory` and `branchName` are available, so moving a repository to another account only requires changing its `name`.
 
-Each sync also writes `.github/template-files.json` to the repository: the template-files commit it ran on and a hash of every file as the template produced it. For **copy** targets the next sync uses it to keep changes made in the repository since then: if only the repository changed a file, it stays as it is; if the template changed too, both changes are merged; and if they conflict, the repository's version stays and the pull request lists the template changes under "Not applied". A repository without a lock file is synced like before. See the [three-way sync](./docs/three-way-sync.md) for the details and the next steps.
+Each sync also writes `.github/template-files.json` into the repository. It records the template-files commit the sync ran on and, for every synced file, a hash of what the template produced. The next sync uses it for **copy** targets to tell your own changes apart from an outdated file: a file you changed since the last sync stays as it is, and if the template changed too, the two changes are merged. When they touch the same lines, your version stays and the pull request lists the template's changes under "Not applied", so you can apply them by hand. A repository without the lock file is synced like before, and the [three-way sync](./docs/three-way-sync.md) document explains the details.
 
 Files are synced in one of these ways:
 
-- **copy**: the file is replaced.
+- **copy**: the file is replaced, unless the repository changed it since the last sync (see above).
 - **merge-json**: the template is deep-merged into the existing file, its values win (`package.json`).
 - **merge-yaml**: the template provides defaults, existing values win and lists are unioned (`pnpm-workspace.yaml`).
 - **add-missing-lines**: missing patterns are appended, existing lines are kept (`.gitignore`, `.prettierignore`).
