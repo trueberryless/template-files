@@ -1,6 +1,6 @@
 # Three-way sync
 
-The sync used to treat every repository as if nobody had touched its synced files. A `copy` operation overwrote the file, and the JSON merge put the template's values back over yours. So if you adjusted a synced workflow in one repository, the next sync either threw that change away or you had to `skip` the whole file. The three-way sync fixes this by remembering what the template looked like at each repository's last sync. With that, the sync can tell a change you made on purpose apart from a file that is simply outdated, and keep your change while still bringing in the template's.
+When you adjust a synced file in one repository, for example a workflow that needs an extra step, the next sync shouldn't throw that change away. The three-way sync prevents that by remembering what the template looked like at each repository's last sync. With that, the sync tells a change you made on purpose apart from a file that is simply outdated, so it keeps your change and still brings in the template's.
 
 ## Three versions of a file
 
@@ -35,20 +35,20 @@ The sync rewrites the lock file only when it changes something else in the repos
 For a `copy` target, the sync goes through these cases in order:
 
 1. If the repository doesn't have the file yet, or it already matches the template, the sync writes the template.
-2. If the lock file has no entry for the file, the sync can't tell your change apart from an outdated file, so it writes the template as it always did. This is what happens in a repository's first sync after the lock file was introduced.
+2. If the lock file has no entry for the file, for example because the repository has no lock file at all, the sync can't tell your change apart from an outdated file, so it writes the template.
 3. If your file still matches the hash in the lock file, you haven't changed it, so the template's new version replaces it.
 4. If you changed the file but the template didn't change since the last sync, your version stays as it is.
 5. If both changed, the sync merges the two with `git merge-file`. When the changes are on different lines, the merged file is written. When they touch the same lines, your version stays.
 
-Whenever your version stays because of a conflict, the sync pull request has a "Not applied" section with the template's changes as a diff, so you can apply them by hand. Conflict markers never end up in a commit, because the repository's CI would fail on them. The same happens when the base can't be rendered anymore, for example because an older template uses a property the repository no longer has.
+Whenever your version stays because of a conflict, the sync pull request has a "Not applied" section with the template's changes as a diff, so you can apply them by hand. Conflict markers never end up in a commit, because the repository's CI would fail on them. The same happens when the base can't be rendered, for example because the template at the recorded commit uses a property the repository doesn't have.
 
-## What is not covered yet
+## Limits and open work
 
-Only `copy` targets are merged this way so far. The JSON and YAML merges for `package.json` and `pnpm-workspace.yaml` don't look at the lock file yet. They should work per key, so that a value the template changed since the base is updated unless you changed the same key in the repository.
+The three-way merge applies to `copy` targets only. The JSON and YAML merges for `package.json` and `pnpm-workspace.yaml` don't use the lock file, and the plan is to merge them per key, so that a value the template changed since the base is updated unless you changed the same key in the repository.
 
 The generated CI workflow, which the sync trims to each repository's scripts, should go through the merge as well. It needs to compare the trimmed versions, because otherwise a repository without tests would look like it deleted the test job.
 
-Once that works, repositories with workflows of their own, like `opendeck.space`, `pronouns.blue` and `astro-docs-i18n-reviewer`, can join the sync without losing their changes. A `strategy` option per target in `repositories.json` could then force the old overwrite for files that a repository should never change, like the `LICENSE`.
+With both in place, repositories with workflows of their own, like `opendeck.space`, `pronouns.blue` and `astro-docs-i18n-reviewer`, can join the sync without losing their changes. A `strategy` option per target in `repositories.json` could then force a plain overwrite for files that a repository should never change, like the `LICENSE`.
 
 ## Other forges
 
