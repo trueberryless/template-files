@@ -41,17 +41,15 @@ Files are synced in one of these ways:
 | [Update Template Files Across Repos](./.github/workflows/sync.yaml) | a release commit on `main`, or by hand                    | Syncs every repository, writes a report and publishes a GitHub release that links to the two workflows below                                                             |
 | [Sync one repository](./.github/workflows/sync-repository.yaml)    | by hand, with the repository (`owner/name`)               | Syncs a single repository again, for example after a merge conflict. The pull request is recreated from the current default branch                                    |
 | [Merge sync pull requests](./.github/workflows/merge-sync-prs.yaml) | by hand, optionally as a dry run and with a merge method | Merges every open sync pull request that is mergeable and has no failing or running checks, and lists why the others were skipped                                       |
-| [Sync labels](./.github/workflows/sync-labels.yaml) | a change to `labels.json` on `main`, every Monday, or by hand | Applies `labels.json` to every repository of the owner, synced or not. See [Labels](#labels) |
+| [Sync labels](./.github/workflows/sync-labels.yaml) | a change to `labels.json` on `main`, every Monday, or by hand | Applies `labels.json` to every repository of the owner that is neither archived nor a fork. See [Labels](#labels) |
 
 ## Labels
 
-[`labels.json`](./labels.json) defines the labels of every repository of the owner, not only the synced ones. `labels` applies to all of them, `repositories` adds labels for a single repository on top. The [Sync labels](./.github/workflows/sync-labels.yaml) workflow then, per repository:
+Labels are kept in sync too, and for more repositories than the files. [`labels.json`](./labels.json) defines the labels of every repository of the owner that is neither archived nor a fork, whether it is listed in `repositories.json` or not. The labels under `labels` go to all of them, and `repositories` adds labels that only a single repository needs, like the translation labels of `opendeck.space`.
 
-- creates missing labels and updates their color and description,
-- renames a label listed under `aliases` (like GitHub's default `bug`) to the new name, so issues and pull requests keep it, or moves its issues over when both exist,
-- deletes every other label that no issue or pull request uses, and only reports the ones still in use.
+The [Sync labels](./.github/workflows/sync-labels.yaml) workflow applies the file every Monday, after every change to it on `main`, and whenever you start it by hand. In each repository it creates the missing labels and updates the color and description of the existing ones. A label listed under `aliases`, such as GitHub's default `bug`, is renamed instead of being recreated, so your issues and pull requests keep it. If the alias and the new label both exist, the issues move over to the new label and the alias is deleted.
 
-Run it as a dry run first to see the planned changes. Locally, `DRY_RUN=true pnpm labels` does the same with your own `gh` login.
+Every other label is deleted only when no issue or pull request uses it. The ones that are still in use stay and show up in the job summary, so you can decide whether to add them to `labels.json` or remove them by hand. Before you change `labels.json`, start the workflow with the dry-run option to see what it would do, or run `DRY_RUN=true pnpm labels` locally, which prints the same report with your own `gh` login.
 
 ## Commands
 
@@ -59,7 +57,7 @@ Run it as a dry run first to see the planned changes. Locally, `DRY_RUN=true pnp
 pnpm check   # typecheck the sync scripts
 pnpm test    # unit tests
 pnpm sync    # sync one repository, needs GH_TOKEN and REPOSITORY (owner/name)
-pnpm labels  # sync the labels of every repository, needs GH_TOKEN; OWNER, REPOSITORY and DRY_RUN=true are optional
+pnpm labels  # sync the labels of every repository, needs GH_TOKEN or a gh login; OWNER, REPOSITORY and DRY_RUN=true are optional
 pnpm merge   # merge the open sync pull requests, needs GH_TOKEN; OWNER, DRY_RUN=true and MERGE_METHOD are optional
 ```
 
