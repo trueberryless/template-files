@@ -1,5 +1,37 @@
 # template-files
 
+## 0.19.0
+
+### Minor Changes
+
+- [#383](https://github.com/trueberryless/template-files/pull/383) [`9840635`](https://github.com/trueberryless/template-files/commit/98406355088cae00bfeda541ea497e10e31301a5) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds the CI workflow to every repository, trimmed to what the repository can run: steps whose `package.json` script is missing are left out, the end-to-end job only runs with a Playwright config, and the test job runs `pnpm test` when there is no `test:coverage` script. A repository without any of the scripts gets no workflow. The `ci` option now only adds the oxlint config and the test tooling.
+
+- [#384](https://github.com/trueberryless/template-files/pull/384) [`3857839`](https://github.com/trueberryless/template-files/commit/385783943deeb6c37bbfef0ae3410553f8d03c0b) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds a `labels.json` that defines the labels of every repository and a `Sync labels` workflow that applies it each Monday and after every change. GitHub's default labels like `bug` are renamed to their emoji versions so issues keep them, and unused labels that are not listed are deleted.
+  
+  The `labeler.yaml` template no longer deletes and recreates the labels on every pull request.
+
+- [#381](https://github.com/trueberryless/template-files/pull/381) [`381b712`](https://github.com/trueberryless/template-files/commit/381b712f0a6d2d969f5ff19780ed3220de28ebc6) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Removes the Discord release notification from the `publish.yaml` template and the Discord summary from the sync workflow.
+
+- [#382](https://github.com/trueberryless/template-files/pull/382) [`3dd1bca`](https://github.com/trueberryless/template-files/commit/3dd1bca9bea202df1a813fa5cfbe87ac22255e4f) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Removes `[skip netlify]` from the release pull request titles and `[skip ci]` from the sync pull request title. When such a pull request was squash-merged, the marker ended up in the commit on `main`, which skipped the production deploy and the CI run there.
+
+- [#388](https://github.com/trueberryless/template-files/pull/388) [`b9a5cca`](https://github.com/trueberryless/template-files/commit/b9a5ccaadef4d30b4e6673f9227f9c2437dfce98) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds a `.github/template-files.json` lock file to every synced repository that records the template-files commit of the last sync and a hash of each synced file. It is only written together with other changes, or when it is missing.
+
+- [#377](https://github.com/trueberryless/template-files/pull/377) [`b88afda`](https://github.com/trueberryless/template-files/commit/b88afda17a808395e6aa74e44428c555f98356a3) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds `astro-changelog`, `starlight-changelog`, `git-diff-viewer`, `mutanuq` and `trueberryless-org` to the synced repositories, all with the `site` preset and `trueberryless-org` with the `ci` option.
+
+- [#376](https://github.com/trueberryless/template-files/pull/376) [`d8c03b6`](https://github.com/trueberryless/template-files/commit/d8c03b6b3839453e8db9cee0974b68a38e1831f7) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds `starlight-compass` to the synced repositories with the `plugin` preset.
+
+- [#386](https://github.com/trueberryless/template-files/pull/386) [`ed0915d`](https://github.com/trueberryless/template-files/commit/ed0915df1910f8eb2c6dca954914e8f5138f7186) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds `astro-blog-template`, `astro-portfolio-template`, `automatic-starlog-template` and `clemens.steinanet.at` to the synced repositories, all with the `site` preset.
+
+- [#389](https://github.com/trueberryless/template-files/pull/389) [`a2f6c65`](https://github.com/trueberryless/template-files/commit/a2f6c657c5cef1f824b68282ceac96adc3e68465) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Keeps changes made in a repository to a copied file. If only the repository changed the file since its last sync, the sync leaves it alone. If the template changed too, both changes are merged, and if they conflict the repository's version stays and the sync pull request shows the template changes under "Not applied".
+
+- [#390](https://github.com/trueberryless/template-files/pull/390) [`2c65135`](https://github.com/trueberryless/template-files/commit/2c65135b66cfa44bac5b45e2636d40c98f503063) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Merges `package.json` and `pnpm-workspace.yaml` key by key against the last sync. A key you left as it was gets the template's new value, a key you changed stays, and a key the template no longer sets is removed unless you changed it. Keys where both sides changed are listed under "Not applied" in the sync pull request.
+
+- [#393](https://github.com/trueberryless/template-files/pull/393) [`4ba3c7a`](https://github.com/trueberryless/template-files/commit/4ba3c7a60f16db58ed628ce3ef94500857c73099) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Adds `trustPolicy: no-downgrade` and `trustPolicyIgnoreAfter: 43200` to the synced `pnpm-workspace.yaml`. pnpm then refuses to install a version published in the last 30 days with weaker trust evidence than an earlier version, for example without trusted publishing after the package used it before.
+
+### Patch Changes
+
+- [#380](https://github.com/trueberryless/template-files/pull/380) [`9de0226`](https://github.com/trueberryless/template-files/commit/9de0226a9a9d933435f3224f23da831e7ade3e74) Thanks [@trueberryless-bot](https://github.com/trueberryless-bot)! - Syncs `time-tracker` with the `oxfmt` formatter and keeps its own `.oxfmtrc.json`, so the sync no longer adds a Prettier config and reformats the repository with Prettier.
+
 ## 0.18.2
 
 ### Patch Changes
