@@ -16,7 +16,7 @@ function project(scripts: string[], hasPlaywright = false): Project {
 }
 
 function adapt(input: Project) {
-  return parse(adaptCiWorkflow(TEMPLATE, input)) as {
+  return parse(adaptCiWorkflow(TEMPLATE, input) ?? "") as {
     jobs: Record<string, { needs?: string[]; steps?: { name?: string; run?: string }[] }>;
   };
 }
@@ -44,7 +44,7 @@ describe("adaptCiWorkflow", () => {
     const workflow = adapt(project(ALL_SCRIPTS));
 
     expect(workflow.jobs["e2e"]).toBeUndefined();
-    expect(workflow.jobs["ci"]?.needs).toEqual(["check", "test", "supply-chain"]);
+    expect(workflow.jobs["ci"]?.needs).toEqual(["check", "test"]);
   });
 
   test("runs the plain test script without a coverage script", () => {
@@ -54,10 +54,7 @@ describe("adaptCiWorkflow", () => {
     expect(workflow.jobs["test"]?.steps?.some(({ name }) => /coverage/i.test(name ?? ""))).toBe(false);
   });
 
-  test("keeps only the supply chain job for a repository without scripts", () => {
-    const workflow = adapt(project([]));
-
-    expect(Object.keys(workflow.jobs)).toEqual(["supply-chain", "ci"]);
-    expect(workflow.jobs["ci"]?.needs).toEqual(["supply-chain"]);
+  test("returns no workflow for a repository without scripts", () => {
+    expect(adaptCiWorkflow(TEMPLATE, project([]))).toBeUndefined();
   });
 });
