@@ -62,6 +62,13 @@ export function applyOperation(
   if (operation.type === "ci") {
     const content = adaptCiWorkflow(template, readProject(targetPath));
 
+    if (content === undefined) {
+      // Only remove a workflow an earlier sync wrote, never one the repository added itself.
+      if (context?.baseHashes[operation.target])
+        rmSync(target, { force: true });
+      return {};
+    }
+
     writeFileSync(target, content);
     return { theirs: content };
   }

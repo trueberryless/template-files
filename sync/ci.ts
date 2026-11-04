@@ -35,9 +35,13 @@ export function readProject(path: string): Project {
 /**
  * Trims the CI workflow template to what a repository can run: steps that call a missing `package.json` script are
  * removed, the end-to-end job only stays with a Playwright config, the test job falls back to `pnpm test` without a
- * `test:coverage` script, and the final `ci` job only waits for the jobs that are left.
+ * `test:coverage` script, and the final `ci` job only waits for the jobs that are left. Returns `undefined` when no job
+ * is left, because the repository has nothing for CI to run.
  */
-export function adaptCiWorkflow(template: string, project: Project) {
+export function adaptCiWorkflow(
+  template: string,
+  project: Project
+): string | undefined {
   const document = parseDocument(template);
   const jobs = document.get("jobs");
   if (!isMap(jobs)) return template;
@@ -60,18 +64,14 @@ export function adaptCiWorkflow(template: string, project: Project) {
   const names = jobs.items.map(({ key }) => String(key));
 
   for (const name of names) {
-    if (
-      name !== "ci" &&
-      name !== "supply-chain" &&
-      !hasScriptStep(document, name)
-    ) {
-      jobs.delete(name);
-    }
+    if (name !== "ci" && !hasScriptStep(document, name)) jobs.delete(name);
   }
 
   const remaining = new Set(
     jobs.items.map(({ key }) => String(key)).filter((name) => name !== "ci")
   );
+  if (remaining.size === 0) return undefined;
+
   const needs = document.getIn(["jobs", "ci", "needs"]);
 
   if (isSeq(needs)) {
