@@ -193,7 +193,7 @@
       "name": "trueberryless/trueberryless-org",
       "preset": "site",
       "ci": true,
-      "homepage": "https://trueberryless-org.trueberryless.org/"
+      "homepage": "https://trueberryless-org.netlify.app/"
     },
     {
       "name": "trueberryless/astro-blog-template",
