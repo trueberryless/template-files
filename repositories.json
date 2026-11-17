@@ -128,8 +128,8 @@
       "name": "trueberryless/trueberryless",
       "preset": "site",
       "ci": true,
-      "homepage": "https://trueberryless.netlify.app/",
-      "skip": [".prettierrc", "package.json/prettier.package.json"]
+      "homepage": "https://felixs.dev",
+      "skip": ["README.md"]
     },
     {
       "name": "trueberryless/npmxers",
